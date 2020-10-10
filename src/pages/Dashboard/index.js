@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { View, Text, ScrollView, Alert } from "react-native";
 
 import api from "./../../services/api";
+import { formatShowMoney } from './../../services/utils';
 
 import styles from "./styles";
 
@@ -13,8 +14,33 @@ export default function ClientDashboard() {
   const navigation = useNavigation();
 
   const [higherCategorySpending, setHigherCategorySpending] = useState([]);
-
   const [movimentsChart, setMovimentsChart] = useState([]);
+
+  const [percentCurrentLiquidity, setPercentCurrentLiquidity] = useState(0);
+  const [currentLiquidity, setCurrentLiquidity] = useState(0);
+
+  const [percentProjectedLiquidity, setPercentProjectedLiquidity] = useState(0);
+  const [projectedLiquidity, setProjectedLiquidity] = useState(0);
+
+  useEffect(() => {
+
+    (async () => {
+      const { data: { percentcurrentliquidity, currentliquidity} } = await api.get("/client-dashboard/current-liquidity");
+
+      setPercentCurrentLiquidity(percentcurrentliquidity);
+      setCurrentLiquidity(currentliquidity)
+
+    })();
+
+    (async () => {
+      const { data: { percentprojectedliquidity, projectedliquidity} } = await api.get("/client-dashboard/projected-liquidity");
+
+      setPercentProjectedLiquidity(percentprojectedliquidity);
+      setProjectedLiquidity(projectedliquidity)
+
+    })();
+
+  },[]);
 
   useEffect(() => {
 
@@ -26,7 +52,7 @@ export default function ClientDashboard() {
           value: value.total,
           svg: {
             fill: value.color,
-            onPress: () => Alert.alert('Descrição', 'Categoria: ' + value.name + '\nR$ ' + value.total),
+            onPress: () => Alert.alert('Descrição', 'Categoria: ' + value.name + '\nR$ ' + formatShowMoney(value.total)),
           },
           key: `pie-${index}`,
        })
@@ -54,7 +80,7 @@ export default function ClientDashboard() {
         'Julho',
         'Agosto',
         'Setembro',
-        'Outobro',
+        'Outubro',
         'Novembro',
         'Dezembro'
       ];
@@ -64,7 +90,7 @@ export default function ClientDashboard() {
           value,
           svg: {
             fill: "#01B075",
-            onPress: () => Alert.alert('Descrição - Receita', 'Mês de referência: ' + label[index] + '\nR$ ' + value),
+            onPress: () => Alert.alert('Descrição - Receita', 'Mês de referência: ' + label[index] + '\nR$ ' + formatShowMoney(value)),
           },
           key: `${index}`,
         })
@@ -75,7 +101,7 @@ export default function ClientDashboard() {
           value,
           svg: {
             fill: "#EF544B",
-            onPress: () => Alert.alert('Descrição - Despesa', 'Mês de referência: ' + label[index] + '\nR$ ' + value),
+            onPress: () => Alert.alert('Descrição - Despesa', 'Mês de referência: ' + label[index] + '\nR$ ' + formatShowMoney(value)),
           },
           key: `${index}`,
         })
@@ -102,26 +128,26 @@ export default function ClientDashboard() {
         <View style={[styles.info_details, { paddingTop: 0 }]}>
           <View>
             <Text style={styles.info_details_title}>Liquidez Atual</Text>
-            <Text style={styles.info_details_value}>R$ 1.180,00</Text>
+            <Text style={styles.info_details_value}>R$ {formatShowMoney(currentLiquidity)}</Text>
             <View style={{ flexDirection: "row" }}>
               <Feather
-                name="arrow-up-right"
+                name={percentCurrentLiquidity > 0 ? "arrow-up-right" : percentCurrentLiquidity < 0 ? "arrow-up-left" : "align-justify"}
                 size={17}
-                style={styles.icon_info_percent}
+                style={percentCurrentLiquidity > 0 ? styles.icon_info_percent_green : percentCurrentLiquidity < 0 ? styles.icon_info_percent_red : ''}
               />
-              <Text style={styles.info_details_percent}>+62,52%</Text>
+              <Text style={percentCurrentLiquidity > 0 ? styles.info_details_percent_green : percentCurrentLiquidity < 0 ? styles.info_details_percent_red : ''}>{formatShowMoney(percentCurrentLiquidity)} %</Text>
             </View>
           </View>
           <View>
             <Text style={styles.info_details_title}>Liquidez Projetada</Text>
-            <Text style={styles.info_details_value}>R$ -2.280,00</Text>
+            <Text style={styles.info_details_value}>R$ {formatShowMoney(projectedLiquidity)}</Text>
             <View style={{ flexDirection: "row" }}>
               <Feather
-                name="arrow-down-left"
+                name={percentProjectedLiquidity > 0 ? "arrow-up-right" : percentProjectedLiquidity < 0 ? "arrow-up-left" : "align-justify"}
                 size={17}
-                style={styles.icon_info_percent_red}
+                style={percentProjectedLiquidity > 0 ? styles.icon_info_percent_green : percentProjectedLiquidity < 0 ? styles.icon_info_percent_red : ''}
               />
-              <Text style={styles.info_details_percent_red}>+112,45%</Text>
+              <Text style={percentProjectedLiquidity > 0 ? styles.info_details_percent_green : percentProjectedLiquidity < 0 ? styles.info_details_percent_red : ''}>{formatShowMoney(percentProjectedLiquidity)} %</Text>
             </View>
           </View>
         </View>

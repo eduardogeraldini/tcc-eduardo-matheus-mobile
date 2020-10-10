@@ -52,11 +52,24 @@ export default StyleSheet.create({
     color: "#EF544B",
   },
 
+  info_details_percent_green: {
+    fontSize: 16,
+    color: "#01B075",
+  },
+
   icon_info_percent_red: {
     marginRight: 5,
     backgroundColor: "rgba(239, 84, 75, 0.2)",
     borderRadius: 50,
     color: "#EF544B",
+  },
+
+  
+  icon_info_percent_green: {
+    marginRight: 5,
+    backgroundColor: "rgba(1, 176, 117, 0.2)",
+    borderRadius: 50,
+    color: "#01B075",
   },
 
   bar_header: {

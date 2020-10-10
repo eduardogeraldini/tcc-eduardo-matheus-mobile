@@ -33,16 +33,6 @@ export default function Settings() {
         />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.block_button} onPress={() => navigation.push('EditPassword')}>
-        <Text>Editar senha</Text>
-        <MaterialCommunityIcons
-          name="arrow-right"
-          size={20}
-          color="#3B3B3B"
-          style={{ marginLeft: 20 }}
-        />
-      </TouchableOpacity>
-
       <View style={styles.block_header}>
         <Text style={styles.block_title}>Outros</Text>
       </View>
