@@ -44,35 +44,57 @@ export default function ClientDashboard() {
       const { data: revenuesData } = await api.get("/client-dashboard/2");
       const { data: expensesData } = await api.get("/client-dashboard/1");
 
-      const data1 = revenuesData.map((value) => ({ value }))
-      const data2 = expensesData.map((value) => ({ value }))
+      const label = [
+        'Janeiro',
+        'Fevereiro',
+        'Março',
+        'Abril',
+        'Maio',
+        'Junho',
+        'Julho',
+        'Agosto',
+        'Setembro',
+        'Outobro',
+        'Novembro',
+        'Dezembro'
+      ];
+
+      const revenues = revenuesData
+        .map((value, index) => ({
+          value,
+          svg: {
+            fill: "#01B075",
+            onPress: () => Alert.alert('Descrição - Receita', 'Mês de referência: ' + label[index] + '\nR$ ' + value),
+          },
+          key: `${index}`,
+        })
+      );
+
+      const expenses = expensesData
+        .map((value, index) => ({
+          value,
+          svg: {
+            fill: "#EF544B",
+            onPress: () => Alert.alert('Descrição - Despesa', 'Mês de referência: ' + label[index] + '\nR$ ' + value),
+          },
+          key: `${index}`,
+        })
+     );
     
       const barData = [
         {
-            data: data1,
-            svg: {
-                fill: "#EF544B",
-                onPress: () => Alert.alert('Descrição', 'R$ ' + data1.value),
-            },
+          data: revenues,
         },
         {
-            data: data2,
-            svg: {
-              fill: "#01B075",
-          },
+          data: expenses,
         },
       ];
 
-    setMovimentsChart(barData);
+      setMovimentsChart(barData);
 
     })();
 
   },[]);
-
-
-  function navigateToDetail() {
-    navigation.navigate("Details");
-  }
 
   return (
     <ScrollView style={styles.container}>

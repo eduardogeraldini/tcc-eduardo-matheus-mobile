@@ -90,7 +90,7 @@ export default StyleSheet.create({
   bar_block_green: {
     width: 15,
     height: 15,
-    backgroundColor: "#01B075",
+  backgroundColor: "#01B075",
     borderRadius: 5,
     marginRight: 5
   },
