@@ -1,0 +1,26 @@
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+
+import Login from "../../../pages/Login";
+import Register from "../../../pages/Register";
+
+const AppStack = createStackNavigator();
+
+export default function AuthStackScreen() {
+  return (
+    <AppStack.Navigator
+      screenOptions={{ headerShown: false, headerTitleAlign: "center" }}
+    >
+      <AppStack.Screen
+        name="Login"
+        options={{ title: "Login" }}
+        component={Login}
+      />
+      <AppStack.Screen
+        name="Register"
+        options={{ title: "Register" }}
+        component={Register}
+      />
+    </AppStack.Navigator>
+  );
+}
